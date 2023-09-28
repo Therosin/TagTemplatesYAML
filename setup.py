@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import os
 import shutil
 
-with open("README", "r") as f:
+with open("README.md", "r") as f:
     long_description = f.read()
 
 if __name__ == "__main__":
