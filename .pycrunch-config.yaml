@@ -1,0 +1,10 @@
+exclusions:
+  - venv/
+  - .venv/
+  - conda/
+  - .conda/
+engine:
+  runtime: pytest
+  load-pytest-plugins: true
+  enable-web-ui: false
+pinned-tests:
