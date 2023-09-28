@@ -1,9 +1,4 @@
-from setuptools import setup, find_packages
-import os
-import shutil
-
-with open("README.md", "r") as f:
-    long_description = f.read()
+from setuptools import setup
 
 if __name__ == "__main__":
     setup(
@@ -11,7 +6,7 @@ if __name__ == "__main__":
         version="1.0",
         description="A useful module",
         license="MIT",
-        long_description=long_description,
+        long_description="""This is really just a test.""",
         author="Therosin",
         author_email="theros@svaltek,xyz",
         url="https:github.com/therosin/TagTemplatesYAML",
