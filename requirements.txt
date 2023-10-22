@@ -1,1 +1,2 @@
 PyYAML
+git+https://github.com/Therosin/PyTagScript

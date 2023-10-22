@@ -11,5 +11,8 @@ if __name__ == "__main__":
         author_email="theros@svaltek,xyz",
         url="https:github.com/therosin/TagTemplatesYAML",
         packages=["TagTemplatesYAML"],
-        install_requires=["pyyaml"],
+        install_requires=[
+            "pyyaml",
+            "git+https://github.com/Therosin/PyTagScript"
+        ],
     )

@@ -9,6 +9,7 @@ from TagTemplatesYAML import (
 )
 from datetime import datetime
 import logging
+from typing import TYPE_CHECKING
 
 logger = logging.getLogger(__name__)
 

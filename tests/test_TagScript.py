@@ -1,8 +1,15 @@
-from TagTemplatesYAML import TagScript, TagScriptSyntaxError, TagScriptRuntimeError, TagScriptArgumentError, TagScriptSandboxError
+from PyTagScript import (
+    TagScript,
+    TagScriptSyntaxError,
+    TagScriptRuntimeError,
+    TagScriptArgumentError,
+    TagScriptSandboxError,
+)
 import pytest
 import logging
 
 logger = logging.getLogger(__name__)
+
 
 @pytest.fixture(scope="module")
 def setup_tagscript():
@@ -11,7 +18,6 @@ def setup_tagscript():
 
 
 class TestTagScriptBasicFunctionality:
-
     def test_tagscript_basic_syntax(self, setup_tagscript):
         tagscript = setup_tagscript
         # should handle basic arithmetic
@@ -25,7 +31,7 @@ class TestTagScriptBasicFunctionality:
         assert tagscript.run("tagscript: [1, 2, 3]") == [1, 2, 3]
         # should handle basic dict operations
         assert tagscript.run("tagscript: {'a': 1, 'b': 2}") == {"a": 1, "b": 2}
-        
+
     def test_tagscript_basic_syntax_with_args(self, setup_tagscript):
         tagscript = setup_tagscript
         # should handle basic arithmetic
@@ -36,9 +42,16 @@ class TestTagScriptBasicFunctionality:
         assert tagscript.run("tagscript: (a, b) => a and b", [True, True]) == True
         assert tagscript.run("tagscript: (a, b) => a or b", [True, False]) == True
         # should handle basic list operations
-        assert tagscript.run("tagscript: (a, b) => a + b", [[1, 2], [3, 4]]) == [1, 2, 3, 4]
+        assert tagscript.run("tagscript: (a, b) => a + b", [[1, 2], [3, 4]]) == [
+            1,
+            2,
+            3,
+            4,
+        ]
         # should handle basic dict operations
-        assert tagscript.run("tagscript: (a, b) => {**a, **b}", [{"a": 1}, {"b": 2}]) == {"a": 1, "b": 2}
+        assert tagscript.run(
+            "tagscript: (a, b) => {**a, **b}", [{"a": 1}, {"b": 2}]
+        ) == {"a": 1, "b": 2}
 
     def test_tagscript_basic_syntax_with_kwargs(self, setup_tagscript):
         tagscript = setup_tagscript
@@ -52,10 +65,13 @@ class TestTagScriptBasicFunctionality:
         # should handle basic list operations
         assert tagscript.run("tagscript: (a=[1, 2], b=[3, 4]) => a + b") == [1, 2, 3, 4]
         # should handle basic dict operations
-        assert tagscript.run("tagscript: (a={'a': 1}, b={'b': 2}) => {**a, **b}") == {"a": 1, "b": 2}
+        assert tagscript.run("tagscript: (a={'a': 1}, b={'b': 2}) => {**a, **b}") == {
+            "a": 1,
+            "b": 2,
+        }
+
 
 class TestTagScriptWithGlobals:
-
     def test_tagscript_globals(self, setup_tagscript):
         tagscript = setup_tagscript
         assert tagscript.run("tagscript: logger") == tagscript.env["logger"]
