@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"python.testing.pytestArgs": [
+			"tests"
+		],
+		"python.testing.unittestEnabled": false,
+		"python.testing.pytestEnabled": true
+	},
+	"extensions": {
+		"recommendations": [
+			"gruntfuggly.todo-tree",
+			"aaron-bond.better-comments",
+			"krembolabs.comment-styler",
+			"ms-python.python",
+			"ms-python.vscode-pylance",
+			"ms-python.black-formatter",
+			"littlefoxteam.vscode-python-test-adapter",
+		]
+	}
+}

@@ -13,6 +13,6 @@ if __name__ == "__main__":
         packages=["TagTemplatesYAML"],
         install_requires=[
             "pyyaml",
-            "git+https://github.com/Therosin/PyTagScript"
+            "PyTagScript @ git+https://github.com/Therosin/PyTagScript"
         ],
     )
