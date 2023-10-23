@@ -2,7 +2,13 @@ import logging
 import re
 from os import path
 import yaml
-from PyTagScript import TagScript
+from PyTagScript import (
+    TagScript,
+    TagScriptSyntaxError,
+    TagScriptRuntimeError,
+    TagScriptArgumentError,
+    TagScriptSandboxError,
+)
 
 logger = logging.getLogger(__name__)
 # logger.setLevel(logging.DEBUG)
@@ -21,6 +27,19 @@ class TemplateInvalidError(Exception):
 
 class TemplateFileError(Exception):
     pass
+
+class TemplateTagSyntaxError(TagScriptSyntaxError):
+    pass
+
+class TemplateTagRuntimeError(TagScriptRuntimeError):
+    pass
+
+class TemplateTagArgumentError(TagScriptArgumentError):
+    pass
+
+class TemplateTagSandboxError(TagScriptSandboxError):
+    pass
+
 
 
 class TagTemplateYAML:
@@ -95,6 +114,23 @@ class TagTemplateYAML:
             raise TemplateVersionError(
                 f"Invalid template version: {parsed_content.get('version')}, expected: {template_manager_version}"
             )
+        
+        # name is required
+        if "name" not in parsed_content:
+            raise TemplateInvalidError("Template must contain a 'name' key with a valid string value.")
+        # name must be a string
+        if not isinstance(parsed_content["name"], str):
+            raise TemplateInvalidError("Invalid template name. Must be a string.")
+        self.name = parsed_content["name"]
+        self.createTag("name", self.name)
+        
+        # desription is optional
+        if "description" in parsed_content:
+            # description must be a string
+            if not isinstance(parsed_content["description"], str):
+                raise TemplateInvalidError("Invalid template description. Must be a string.")
+            self.description = parsed_content["description"]
+        self.createTag("description", f"{hasattr(self, 'description') and self.description or 'No description'}")
 
         # tags is optional
         if "tags" in parsed_content:
@@ -216,7 +252,7 @@ class TagTemplateYAML:
                     arg = arg.strip()
                     value = evaluate_tag(arg)  # Evaluate the argument as a tag
                     if value is None:
-                        value = arg  # Use the argument as-is if it's not a tag
+                        value = arg  # Use the argument as-is it's not a tag
                     params.append(value)
                 value = self.TemplateEngine.run(script, params)
                 content = content.replace(f"<<{match}({args})>>", str(value))

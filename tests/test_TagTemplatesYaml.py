@@ -9,13 +9,13 @@ from TagTemplatesYAML import (
 )
 from datetime import datetime
 import logging
-from typing import TYPE_CHECKING
 
 logger = logging.getLogger(__name__)
 
 # Define global TemplateContent with a 'tags' section
 TemplateContent = """
 version: "1.0"
+name: "test_template"
 tags:
   - new_placeholder: "Some Value"
   - date: "tagscript: datetime.now().strftime('%Y-%m-%d')"
@@ -112,6 +112,7 @@ def test_tagscript_tag_params(setup_template_manager):
 
 string_template_content = """
 version: "1.0"
+name: "test_string_template"
 template: |
     Hello <<name>>!
     Today is <<date>>.
@@ -180,7 +181,7 @@ def test_save_template(setup_template_manager):
     parsed_content = yaml.safe_load(raw_content)
     assert parsed_content["version"] == "1.0"
     tags = parsed_content["tags"]
-    assert len(tags) == 8
+    assert len(tags) == 10
     assert {"new_placeholder": "Some Value"} in tags
     assert {"date": "tagscript: datetime.now().strftime('%Y-%m-%d')"} in tags
     assert {"user": "John Doe"} in tags
@@ -193,6 +194,7 @@ def test_save_template(setup_template_manager):
 
 template_content_invalid_version = """
 version: "2.0"
+name: "test_invalid_version"
 template: |
     Hello <<name>>!
     Today is <<date>>.
@@ -216,6 +218,7 @@ def test_invalid_version():
 
 template_content_missing_template = """
 version: "1.0"
+name: "test_missing_template"
 tags:
     - new_placeholder: "Some Value"
     - date: "tagscript: datetime.now().strftime('%Y-%m-%d')"
