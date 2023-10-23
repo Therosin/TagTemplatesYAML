@@ -117,6 +117,7 @@ template: |
     Hello <<name>>!
     Today is <<date>>.
     The current timestamp is <<timestamp>>.
+    {context}
 """
 
 
@@ -136,11 +137,13 @@ def test_string_template():
     the_time = datetime.now().timestamp()
     template_manager.createTag("timestamp", f"tagscript: {the_time}")
     # Replace the placeholder with the dynamic tag
-    parsed_template = template_manager.parseTemplate()
+    parsed_template = template_manager.parseTemplate(context="Digital Exploration")
     assert isinstance(parsed_template, str)
     assert "Hello John Doe!" in parsed_template
     assert f"Today is {datetime.now().strftime('%Y-%m-%d')}." in parsed_template
     assert f"The current timestamp is {the_time}." in parsed_template
+    assert "Digital Exploration" in parsed_template
+    logger.debug(f"Result: {parsed_template}")
     # Cleanup: remove the test template file
     os.remove(template_file)
 
@@ -158,13 +161,13 @@ def test_load_template():
     )
     template_manager.createTag("user", "John Doe")
     template_manager.createTag("context", "Digital Exploration")
-    template_manager.createTag("char", "A")
+    template_manager.createTag("char", "A {player}")
 
-    parsed_template = template_manager.parseTemplate()
+    parsed_template = template_manager.parseTemplate(player="player")
     assert isinstance(parsed_template, dict)
     assert parsed_template["name"] == "John Doe"
     assert parsed_template["realm"] == "Digital Exploration"
-    assert parsed_template["player"] == "A"
+    assert parsed_template["player"] == "A player"
 
     # Cleanup: remove the test template file
     os.remove(template_file)

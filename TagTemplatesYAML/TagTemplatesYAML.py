@@ -258,7 +258,7 @@ class TagTemplateYAML:
                 content = content.replace(f"<<{match}({args})>>", str(value))
         return content
 
-    def parseTemplate(self):
+    def parseTemplate(self, *args, **kwargs):
         """
         Parse the loaded template, evaluating any tagscript expressions and replacing placeholders.
         Returns:
@@ -266,12 +266,14 @@ class TagTemplateYAML:
         """
         if isinstance(self.template_content, str):
             logger.debug("parseTemplate: template is a string")
-            return self.replacePlaceholders(self.template_content)
+            parsed_content = self.replacePlaceholders(self.template_content)
+            return parsed_content.format(*args, **kwargs) 
         elif isinstance(self.template_content, dict):
             logger.debug("parseTemplate: template is a dictionary")
             parsed_content = self.template_content.copy()
             for key, value in parsed_content.items():
-                parsed_content[key] = self.replacePlaceholders(str(value))
+                content = self.replacePlaceholders(str(value))
+                parsed_content[key] = content.format(*args, **kwargs)
             return parsed_content
         else:
             raise TemplateInvalidError("Invalid template content.")
